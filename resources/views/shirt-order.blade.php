@@ -4,22 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title></title>
+    <title>Kids' Shirt Order</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
 <body class="min-h-screen bg-gradient-to-br from-yellow-300 via-pink-300 to-blue-300 p-4">
-    <!-- Navigation Bar -->
-    <nav class="bg-white/95 backdrop-blur-lg p-4 rounded-2xl shadow-2xl max-w-4xl mx-auto mb-4">
-        <div class="flex justify-center space-x-4">
-            <a href="/"
-                class="text-lg font-bold text-blue-600 bg-blue-100 px-4 py-2 rounded-lg hover:bg-blue-200 transition duration-300">Order
-                Shirts</a>
-            <a href="/orders"
-                class="text-lg font-bold text-blue-600 bg-blue-100 px-4 py-2 rounded-lg hover:bg-blue-200 transition duration-300">See
-                Orders</a>
-        </div>
-    </nav>
+@include('partials.navbar')
     <!-- Custom Alert Dialog -->
     <div id="alert-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div class="bg-white/95 backdrop-blur-lg p-6 rounded-2xl shadow-2xl max-w-sm w-full text-center">
@@ -31,18 +21,16 @@
     </div>
     <!-- Order Form -->
     <div class="bg-white/95 backdrop-blur-lg p-6 sm:p-8 rounded-2xl shadow-2xl max-w-lg w-full mx-auto">
-        <h2 class="text-3xl sm:text-4xl font-extrabold text-center text-gray-800 mb-6 sm:mb-8">Pick Your Shirts!</h2>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-center text-gray-800 mb-6 sm:mb-8">Pick Your Shirts,
+            {{ Auth::user()->name }}!</h2>
         <div class="space-y-6">
-            <!-- Name and Phone -->
+
+            <!-- Order Date -->
             <div>
-                <label for="name" class="block text-lg font-bold text-gray-700">Your Name</label>
-                <input type="text" id="name" placeholder="Enter your name"
-                    class="mt-2 w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-lg">
-            </div>
-            <div>
-                <label for="phone" class="block text-lg font-bold text-gray-700">Your Phone</label>
-                <input type="tel" id="phone" placeholder="Enter your phone number"
-                    class="mt-2 w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-lg">
+                <label for="order_date" class="block text-lg font-bold text-gray-700">Order Date</label>
+                <input type="date" id="order_date"
+                    class="mt-2 w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-lg"
+                    min="{{ date('Y-m-d') }}" value="{{ date('Y-m-d') }}">
             </div>
             <!-- Adult Sizes -->
             <div id="adult-sizes">
@@ -113,7 +101,7 @@
     </div>
     <script>
         const order = {};
-        const TAX_RATE = 1.0973; // 9.73% tax to make $15 -> $16.46
+        const TAX_RATE = 1.0973; // 9.73% tax
 
         function addToOrder(sizeId) {
             const button = document.getElementById(sizeId);
@@ -126,10 +114,10 @@
             order[sizeId].selected = !order[sizeId].selected;
             if (order[sizeId].selected) {
                 button.classList.add('bg-blue-400', 'text-white');
-                order[sizeId].quantity = 1; // Start with 1 when selected
+                order[sizeId].quantity = 1;
             } else {
                 button.classList.remove('bg-blue-400', 'text-white');
-                order[sizeId].quantity = 0; // Reset quantity when deselected
+                order[sizeId].quantity = 0;
             }
             updateSummary();
         }
@@ -173,11 +161,11 @@
                         </div>
                     `;
                     summaryList.appendChild(li);
-                    subtotal += quantity * 15; // $15 per shirt
+                    subtotal += quantity * 15;
                 }
             });
 
-            const total = subtotal * TAX_RATE; // Apply 9.73% tax
+            const total = subtotal * TAX_RATE;
             document.getElementById('total-cost').textContent = `$${total.toFixed(2)}`;
         }
 
@@ -192,8 +180,7 @@
         }
 
         function submitOrder() {
-            const name = document.getElementById('name').value;
-            const phone = document.getElementById('phone').value;
+            const orderDate = document.getElementById('order_date').value;
             const sizes = {};
 
             Object.keys(order).forEach(sizeId => {
@@ -204,9 +191,8 @@
                 }
             });
 
-            if (!name || !phone || Object.keys(sizes).length === 0) {
-                showAlert('Oops!',
-                    'Please enter your name, phone number, and select at least one shirt size with quantity.');
+            if (!orderDate || Object.keys(sizes).length === 0) {
+                showAlert('Oops!', 'Please select an order date and at least one shirt size with quantity.');
                 return;
             }
 
@@ -217,9 +203,8 @@
                         'X-CSRF-TOKEN': '{{ csrf_token() }}',
                     },
                     body: JSON.stringify({
-                        name: name,
-                        phone: phone,
                         sizes: sizes,
+                        order_date: orderDate,
                     }),
                 })
                 .then(response => response.json())
@@ -231,7 +216,7 @@
                             'Order placed successfully! You can check your order in the "See Orders" page.');
                         setTimeout(() => {
                             window.location.href = '/orders';
-                        }, 2000); // Redirect after 2 seconds
+                        }, 2000);
                     }
                 })
                 .catch(error => {

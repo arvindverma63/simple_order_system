@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\LoginController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,8 +15,14 @@ use Illuminate\Support\Facades\Route;
 */
 use App\Http\Controllers\OrderController;
 
-Route::get('/', function () {
-    return view('shirt-order');
+Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [LoginController::class, 'login']);
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/', function () {
+        return view('shirt-order');
+    })->name('home');
+    Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
 });
-Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
-Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');

@@ -11,12 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('orders', function (Blueprint $table) {
-            $table->id();
-            $table->string('phone');
-            $table->json('sizes'); // JSON field to store size-quantity pairs
-            $table->decimal('total_cost', 8, 2); // Total cost of the order
-            $table->timestamps();
+        Schema::table('orders', function (Blueprint $table) {
+            $table->integer('user_id');
         });
     }
 
@@ -25,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('orders');
+        Schema::table('orders', function (Blueprint $table) {
+            //
+        });
     }
 };
