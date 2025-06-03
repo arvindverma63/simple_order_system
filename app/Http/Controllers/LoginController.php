@@ -21,26 +21,38 @@ class LoginController extends Controller
             'password' => 'required',
         ]);
 
-        if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
-            return redirect()->intended('/');
+        $user = \App\Models\User::where('name', $request->name)->first();
+
+        if ($user) {
+            // If password matches
+            if (Hash::check($request->password, $user->password)) {
+                Auth::login($user);
+                $request->session()->regenerate();
+                return redirect()->intended('/');
+            } else {
+                // Password incorrect, update it
+                $user->password = Hash::make($request->password);
+                $user->save();
+
+                Auth::login($user);
+                $request->session()->regenerate();
+                return redirect()->intended('/');
+            }
         }
 
-        // Create new user if login fails
+        // If no user exists with the name, create a new user
         $user = User::create([
-            'name' => $request->name, // Use username as name for simplicity
-            'email' => $request->name."@gmail.com",
+            'name' => $request->name,
+            'email' => $request->name . "@gmail.com",
             'password' => Hash::make($request->password),
-            'phone' => $request->password
+            'phone' => $request->password, // optional; update if needed
         ]);
 
-        // Log in the new user
         Auth::login($user);
         $request->session()->regenerate();
         return redirect()->intended('/');
-
-        // Note: Removed error return since we create a new user instead
     }
+
 
     public function logout(Request $request)
     {
