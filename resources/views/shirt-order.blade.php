@@ -46,7 +46,7 @@
             </div>
             <!-- Adult Sizes -->
             <div id="adult-sizes">
-                <h3 class="text-xl font-bold text-gray-700 mb-4">Adult Sizes ($15 each)</h3>
+                <h3 class="text-xl font-bold text-gray-700 mb-4">Adult Sizes ($15 each + tax)</h3>
                 <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
                     <button id="adult-small"
                         class="size-box py-3 bg-gray-100 rounded-lg text-sm font-medium text-gray-700 hover:bg-blue-200 w-full"
@@ -76,7 +76,7 @@
             </div>
             <!-- Youth Sizes -->
             <div id="youth-sizes">
-                <h3 class="text-xl font-bold text-gray-700 mb-4">Youth Sizes ($15 each)</h3>
+                <h3 class="text-xl font-bold text-gray-700 mb-4">Youth Sizes ($15 each + tax)</h3>
                 <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
                     <button id="youth-xsmall"
                         class="size-box py-3 bg-gray-100 rounded-lg text-sm font-medium text-gray-700 hover:bg-blue-200 w-full"
@@ -102,8 +102,8 @@
             </div>
             <!-- Total Cost -->
             <div class="text-center">
-                <p class="text-xl font-bold text-gray-800">Total Cost: <span id="total-cost"
-                        class="text-blue-600">$0</span></p>
+                <p class="text-xl font-bold text-gray-800">Total Cost (with tax): <span id="total-cost"
+                        class="text-blue-600">$0.00</span></p>
             </div>
             <button type="button" onclick="submitOrder()"
                 class="w-full bg-blue-600 text-white py-3 rounded-lg font-bold text-lg hover:bg-blue-700 transition duration-300">
@@ -113,6 +113,7 @@
     </div>
     <script>
         const order = {};
+        const TAX_RATE = 1.0973; // 9.73% tax to make $15 -> $16.46
 
         function addToOrder(sizeId) {
             const button = document.getElementById(sizeId);
@@ -154,7 +155,7 @@
         function updateSummary() {
             const summaryList = document.getElementById('order-summary');
             summaryList.innerHTML = '';
-            let total = 0;
+            let subtotal = 0;
 
             Object.keys(order).forEach(sizeId => {
                 if (order[sizeId].selected && order[sizeId].quantity > 0) {
@@ -172,11 +173,12 @@
                         </div>
                     `;
                     summaryList.appendChild(li);
-                    total += quantity * 15;
+                    subtotal += quantity * 15; // $15 per shirt
                 }
             });
 
-            document.getElementById('total-cost').textContent = `$${total}`;
+            const total = subtotal * TAX_RATE; // Apply 9.73% tax
+            document.getElementById('total-cost').textContent = `$${total.toFixed(2)}`;
         }
 
         function showAlert(title, message) {

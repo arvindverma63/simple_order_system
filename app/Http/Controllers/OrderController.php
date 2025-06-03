@@ -26,7 +26,7 @@ class OrderController extends Controller
         $totalCost = 0;
         foreach ($request->sizes as $size => $data) {
             if ($data['quantity'] > 0) {
-                $totalCost += $data['quantity'] * 15; // $15 per shirt
+                $totalCost += $data['quantity'] * 15; // $15 per shirt, no additional costs
             }
         }
 
