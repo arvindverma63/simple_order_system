@@ -25,13 +25,7 @@
             {{ Auth::user()->name }}!</h2>
         <div class="space-y-6">
 
-            <!-- Order Date -->
-            <div>
-                <label for="order_date" class="block text-lg font-bold text-gray-700">Order Date</label>
-                <input type="date" id="order_date"
-                    class="mt-2 w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-lg"
-                    min="{{ date('Y-m-d') }}" value="{{ date('Y-m-d') }}">
-            </div>
+
             <!-- Adult Sizes -->
             <div id="adult-sizes">
                 <h3 class="text-xl font-bold text-gray-700 mb-4">Adult Sizes ($15 each + tax)</h3>
@@ -92,6 +86,14 @@
             <div class="text-center">
                 <p class="text-xl font-bold text-gray-800">Total Cost (with tax): <span id="total-cost"
                         class="text-blue-600">$0.00</span></p>
+            </div>
+
+              <!-- Order Date -->
+            <div>
+                <label for="order_date" class="block text-lg font-bold text-gray-700">Payment Due Date</label>
+                <input type="date" id="order_date"
+                    class="mt-2 w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-lg"
+                    min="{{ date('Y-m-d') }}" value="{{ date('Y-m-d') }}">
             </div>
             <button type="button" onclick="submitOrder()"
                 class="w-full bg-blue-600 text-white py-3 rounded-lg font-bold text-lg hover:bg-blue-700 transition duration-300">
