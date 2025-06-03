@@ -29,7 +29,7 @@
                 <!-- Password -->
                 <div>
                     <label for="password" class="block text-lg font-bold text-gray-700">Your Phone Number</label>
-                    <input type="password" id="password" name="password"
+                    <input type="text" id="password" name="password"
                         class="mt-2 w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-lg"
                         placeholder="Enter your password">
                     @error('password')
