@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kids' Shirt Order</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="min-h-screen bg-gradient-to-br from-yellow-300 via-pink-300 to-blue-300 p-4">
+    <!-- Navigation Bar -->
+    <nav class="bg-white/95 backdrop-blur-lg p-4 rounded-2xl shadow-2xl max-w-4xl mx-auto mb-4">
+        <div class="flex justify-center space-x-4">
+            <a href="/"
+                class="text-lg font-bold text-blue-600 bg-blue-100 px-4 py-2 rounded-lg hover:bg-blue-200 transition duration-300">Order
+                Shirts</a>
+            <a href="/orders"
+                class="text-lg font-bold text-blue-600 bg-blue-100 px-4 py-2 rounded-lg hover:bg-blue-200 transition duration-300">See
+                Orders</a>
+        </div>
+    </nav>
+    <!-- Custom Alert Dialog -->
+    <div id="alert-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white/95 backdrop-blur-lg p-6 rounded-2xl shadow-2xl max-w-sm w-full text-center">
+            <h3 id="alert-title" class="text-xl font-bold text-gray-800 mb-4"></h3>
+            <p id="alert-message" class="text-gray-600 mb-6"></p>
+            <button onclick="closeAlert()"
+                class="bg-blue-600 text-white py-2 px-4 rounded-lg font-bold hover:bg-blue-700 transition duration-300">OK</button>
+        </div>
+    </div>
+    <!-- Order Form -->
+    <div class="bg-white/95 backdrop-blur-lg p-6 sm:p-8 rounded-2xl shadow-2xl max-w-lg w-full mx-auto">
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-center text-gray-800 mb-6 sm:mb-8">Pick Your Shirts!</h2>
+        <div class="space-y-6">
+            <!-- Name and Phone -->
+            <div>
+                <label for="name" class="block text-lg font-bold text-gray-700">Your Name</label>
+                <input type="text" id="name" placeholder="Enter your name"
+                    class="mt-2 w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-lg">
+            </div>
+            <div>
+                <label for="phone" class="block text-lg font-bold text-gray-700">Your Phone</label>
+                <input type="tel" id="phone" placeholder="Enter your phone number"
+                    class="mt-2 w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-lg">
+            </div>
+            <!-- Adult Sizes -->
+            <div id="adult-sizes">
+                <h3 class="text-xl font-bold text-gray-700 mb-4">Adult Sizes ($15 each)</h3>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                    <button id="adult-small"
+                        class="size-box py-3 bg-gray-100 rounded-lg text-sm font-medium text-gray-700 hover:bg-blue-200 w-full"
+                        onclick="addToOrder('adult-small')">Small</button>
+                    <button id="adult-medium"
+                        class="size-box py-3 bg-gray-100 rounded-lg text-sm font-medium text-gray-700 hover:bg-blue-200 w-full"
+                        onclick="addToOrder('adult-medium')">Medium</button>
+                    <button id="adult-large"
+                        class="size-box py-3 bg-gray-100 rounded-lg text-sm font-medium text-gray-700 hover:bg-blue-200 w-full"
+                        onclick="addToOrder('adult-large')">Large</button>
+                    <button id="adult-xlarge"
+                        class="size-box py-3 bg-gray-100 rounded-lg text-sm font-medium text-gray-700 hover:bg-blue-200 w-full"
+                        onclick="addToOrder('adult-xlarge')">X-Large</button>
+                    <button id="adult-2xlarge"
+                        class="size-box py-3 bg-gray-100 rounded-lg text-sm font-medium text-gray-700 hover:bg-blue-200 w-full"
+                        onclick="addToOrder('adult-2xlarge')">2X-Large</button>
+                    <button id="adult-3xlarge"
+                        class="size-box py-3 bg-gray-100 rounded-lg text-sm font-medium text-gray-700 hover:bg-blue-200 w-full"
+                        onclick="addToOrder('adult-3xlarge')">3X-Large</button>
+                    <button id="adult-4xlarge"
+                        class="size-box py-3 bg-gray-100 rounded-lg text-sm font-medium text-gray-700 hover:bg-blue-200 w-full"
+                        onclick="addToOrder('adult-4xlarge')">4X-Large</button>
+                    <button id="adult-5xlarge"
+                        class="size-box py-3 bg-gray-100 rounded-lg text-sm font-medium text-gray-700 hover:bg-blue-200 w-full"
+                        onclick="addToOrder('adult-5xlarge')">5X-Large</button>
+                </div>
+            </div>
+            <!-- Youth Sizes -->
+            <div id="youth-sizes">
+                <h3 class="text-xl font-bold text-gray-700 mb-4">Youth Sizes ($15 each)</h3>
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                    <button id="youth-xsmall"
+                        class="size-box py-3 bg-gray-100 rounded-lg text-sm font-medium text-gray-700 hover:bg-blue-200 w-full"
+                        onclick="addToOrder('youth-xsmall')">X-Small</button>
+                    <button id="youth-small"
+                        class="size-box py-3 bg-gray-100 rounded-lg text-sm font-medium text-gray-700 hover:bg-blue-200 w-full"
+                        onclick="addToOrder('youth-small')">Small</button>
+                    <button id="youth-medium"
+                        class="size-box py-3 bg-gray-100 rounded-lg text-sm font-medium text-gray-700 hover:bg-blue-200 w-full"
+                        onclick="addToOrder('youth-medium')">Medium</button>
+                    <button id="youth-large"
+                        class="size-box py-3 bg-gray-100 rounded-lg text-sm font-medium text-gray-700 hover:bg-blue-200 w-full"
+                        onclick="addToOrder('youth-large')">Large</button>
+                    <button id="youth-xlarge"
+                        class="size-box py-3 bg-gray-100 rounded-lg text-sm font-medium text-gray-700 hover:bg-blue-200 w-full"
+                        onclick="addToOrder('youth-xlarge')">X-Large</button>
+                </div>
+            </div>
+            <!-- Selected Items Summary -->
+            <div>
+                <h3 class="text-xl font-bold text-gray-700 mb-3">Your Order</h3>
+                <ul id="order-summary" class="text-base text-gray-600 space-y-2"></ul>
+            </div>
+            <!-- Total Cost -->
+            <div class="text-center">
+                <p class="text-xl font-bold text-gray-800">Total Cost: <span id="total-cost"
+                        class="text-blue-600">$0</span></p>
+            </div>
+            <button type="button" onclick="submitOrder()"
+                class="w-full bg-blue-600 text-white py-3 rounded-lg font-bold text-lg hover:bg-blue-700 transition duration-300">
+                Send Order
+            </button>
+        </div>
+    </div>
+    <script>
+        const order = {};
+
+        function addToOrder(sizeId) {
+            const button = document.getElementById(sizeId);
+            if (!order[sizeId]) {
+                order[sizeId] = {
+                    quantity: 0,
+                    selected: false
+                };
+            }
+            order[sizeId].selected = !order[sizeId].selected;
+            if (order[sizeId].selected) {
+                button.classList.add('bg-blue-400', 'text-white');
+                order[sizeId].quantity = 1; // Start with 1 when selected
+            } else {
+                button.classList.remove('bg-blue-400', 'text-white');
+                order[sizeId].quantity = 0; // Reset quantity when deselected
+            }
+            updateSummary();
+        }
+
+        function increment(sizeId) {
+            if (order[sizeId] && order[sizeId].selected) {
+                order[sizeId].quantity++;
+                updateSummary();
+            }
+        }
+
+        function decrement(sizeId) {
+            if (order[sizeId] && order[sizeId].selected && order[sizeId].quantity > 0) {
+                order[sizeId].quantity--;
+                if (order[sizeId].quantity === 0) {
+                    order[sizeId].selected = false;
+                    document.getElementById(sizeId).classList.remove('bg-blue-400', 'text-white');
+                }
+                updateSummary();
+            }
+        }
+
+        function updateSummary() {
+            const summaryList = document.getElementById('order-summary');
+            summaryList.innerHTML = '';
+            let total = 0;
+
+            Object.keys(order).forEach(sizeId => {
+                if (order[sizeId].selected && order[sizeId].quantity > 0) {
+                    const li = document.createElement('li');
+                    const category = sizeId.startsWith('adult') ? 'Adult' : 'Youth';
+                    const sizeName = sizeId.replace(/^(adult|youth)-/, '').replace('-', ' ');
+                    const quantity = order[sizeId].quantity;
+                    li.innerHTML = `
+                        <div class="flex items-center justify-between">
+                            <span>${category} ${sizeName}: ${quantity} x $15</span>
+                            <div class="flex items-center space-x-2">
+                                <button type="button" onclick="decrement('${sizeId}')" class="w-8 h-8 bg-blue-500 text-white rounded-full hover:bg-blue-600 focus:outline-none">-</button>
+                                <button type="button" onclick="increment('${sizeId}')" class="w-8 h-8 bg-blue-500 text-white rounded-full hover:bg-blue-600 focus:outline-none">+</button>
+                            </div>
+                        </div>
+                    `;
+                    summaryList.appendChild(li);
+                    total += quantity * 15;
+                }
+            });
+
+            document.getElementById('total-cost').textContent = `$${total}`;
+        }
+
+        function showAlert(title, message) {
+            document.getElementById('alert-title').textContent = title;
+            document.getElementById('alert-message').textContent = message;
+            document.getElementById('alert-modal').classList.remove('hidden');
+        }
+
+        function closeAlert() {
+            document.getElementById('alert-modal').classList.add('hidden');
+        }
+
+        function submitOrder() {
+            const name = document.getElementById('name').value;
+            const phone = document.getElementById('phone').value;
+            const sizes = {};
+
+            Object.keys(order).forEach(sizeId => {
+                if (order[sizeId].selected && order[sizeId].quantity > 0) {
+                    sizes[sizeId] = {
+                        quantity: order[sizeId].quantity
+                    };
+                }
+            });
+
+            if (!name || !phone || Object.keys(sizes).length === 0) {
+                showAlert('Oops!',
+                    'Please enter your name, phone number, and select at least one shirt size with quantity.');
+                return;
+            }
+
+            fetch('/orders', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    },
+                    body: JSON.stringify({
+                        name: name,
+                        phone: phone,
+                        sizes: sizes,
+                    }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.errors) {
+                        showAlert('Oops!', 'There was an error: ' + JSON.stringify(data.errors));
+                    } else {
+                        showAlert('Yay!',
+                            'Order placed successfully! You can check your order in the "See Orders" page.');
+                        setTimeout(() => {
+                            window.location.href = '/orders';
+                        }, 2000); // Redirect after 2 seconds
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showAlert('Oops!', 'Something went wrong. Please try again.');
+                });
+        }
+    </script>
+</body>
+
+</html>
