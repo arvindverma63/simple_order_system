@@ -74,12 +74,25 @@
 </body>
 <script>
     function openModal(id) {
-        document.getElementById(id).classList.remove('hidden');
+        const modal = document.getElementById(id);
+        modal.classList.remove('hidden');
+        const content = modal.querySelector('.modal-content');
+        requestAnimationFrame(() => {
+            content.classList.remove('scale-95', 'opacity-0');
+            content.classList.add('scale-100', 'opacity-100');
+        });
     }
 
     function closeModal(id) {
-        document.getElementById(id).classList.add('hidden');
+        const modal = document.getElementById(id);
+        const content = modal.querySelector('.modal-content');
+        content.classList.remove('scale-100', 'opacity-100');
+        content.classList.add('scale-95', 'opacity-0');
+        setTimeout(() => {
+            modal.classList.add('hidden');
+        }, 200); // wait for animation to finish
     }
 </script>
+
 
 </html>
