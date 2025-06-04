@@ -18,7 +18,7 @@ use App\Http\Controllers\OrderController;
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
-Route::fallback(function(){
+Route::fallback(function () {
     return view('shirt-order');
 });
 
@@ -28,4 +28,6 @@ Route::middleware('auth')->group(function () {
     })->name('home');
     Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+    Route::post('/orders/status', [OrderController::class, 'updateStatus'])->name('order.status');
+    Route::delete('/orders/{id}', [OrderController::class, 'destroy'])->name('order.delete');
 });

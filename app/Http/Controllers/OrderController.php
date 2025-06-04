@@ -52,9 +52,38 @@ class OrderController extends Controller
     {
         if (Auth::user()->is_admin === 0) {
             $orders = Order::where('user_id', Auth::user()->id)->get();
-        }else{
+        } else {
             $orders = Order::all();
         }
         return view('orders.index', compact('orders'));
+    }
+
+    public function updateStatus(Request $request)
+    {
+        $validate = $request->validate([
+            'status' => 'in:accept,cancel,pending',
+            'order_id' => 'integer|required'
+        ]);
+
+        $order = Order::find($request->order_id);
+        if (!$order) {
+            return response()->json(['success' => false, 'message' => 'Order not found'], 404);
+        }
+
+        $order->status = $request->status;
+        $order->save();
+
+        return response()->json(['success' => true, 'message' => 'Status updated successfully']);
+    }
+
+    public function destroy($id)
+    {
+        $order = Order::find($id);
+        if (!$order) {
+            return response()->json(['success' => false, 'message' => 'Order not found'], 404);
+        }
+
+        $order->delete();
+        return response()->json(['success' => true, 'message' => 'Order deleted successfully']);
     }
 }
