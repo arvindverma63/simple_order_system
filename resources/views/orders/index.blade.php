@@ -46,7 +46,7 @@
 
                         <!-- Modal Backdrop -->
                         <div id="modal-{{ $order->id }}"
-                            class="fixed inset-0 z-50 hidden bg-black/50 backdrop-blur-sm flex items-center justify-center">
+                            class="fixed inset-0 z-50 hidden bg-black/50 backdrop-blur-sm rounded-2xl flex items-center justify-center">
                             <!-- Modal Box -->
                             <div
                                 class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 relative transform transition-all duration-300 scale-95 opacity-0 modal-content">
