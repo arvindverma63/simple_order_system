@@ -43,10 +43,12 @@
                         </tr>
 
                         <div id="modal-{{ $order->id }}"
-                            class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center">
-                            <div class="bg-white rounded-lg shadow-xl p-6 max-w-md w-full relative">
-                                <h3 class="text-xl font-bold mb-4">Size Details</h3>
-                                <ul class="list-disc list-inside text-gray-700">
+                            class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdrop-blur-sm">
+                            <div
+                                class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 relative transform transition-all duration-300 scale-95 opacity-0 modal-content">
+                                <h3 class="text-2xl font-bold text-gray-800 mb-4 text-center border-b pb-2">Size Details
+                                </h3>
+                                <ul class="list-disc list-inside text-gray-700 text-base space-y-1">
                                     @foreach ($order->sizes as $size => $data)
                                         @if ($data['quantity'] > 0)
                                             <li>{{ ucwords(str_replace('-', ' ', $size)) }}: {{ $data['quantity'] }}
@@ -55,7 +57,13 @@
                                     @endforeach
                                 </ul>
                                 <button onclick="closeModal('modal-{{ $order->id }}')"
-                                    class="absolute top-2 right-2 text-gray-500 hover:text-red-600 text-xl">&times;</button>
+                                    class="absolute top-2 right-3 text-gray-400 hover:text-red-500 text-2xl leading-none">&times;</button>
+                                <div class="text-center mt-6">
+                                    <button onclick="closeModal('modal-{{ $order->id }}')"
+                                        class="px-5 py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition duration-300">
+                                        Close
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     @endforeach
