@@ -15,7 +15,7 @@
     <div class="bg-white/95 backdrop-blur-lg p-6 sm:p-8 rounded-2xl shadow-2xl max-w-4xl w-full mx-auto">
         <h2 class="text-3xl sm:text-4xl font-extrabold text-center text-gray-800 mb-6 sm:mb-8">All Shirt Orders</h2>
         <div class="overflow-x-auto">
-            <table class="w-full text-left text-sm text-gray-600" id="default-table search-table">
+            <table class="w-full text-left text-sm text-gray-600" id="ordersTable">
                 <thead class="bg-gray-100">
                     <tr>
                         <th class="px-4 py-3 font-bold text-gray-700">Name</th>
@@ -96,8 +96,12 @@
             modal.classList.add('hidden');
         }, 200);
     }
-
-
+    document.addEventListener("DOMContentLoaded", function() {
+        const table = document.querySelector("#ordersTable");
+        if (table) {
+            new simpleDatatables.DataTable(table);
+        }
+    });
 </script>
 <script src="https://cdn.jsdelivr.net/npm/simple-datatables@9.0.3"></script>
 
