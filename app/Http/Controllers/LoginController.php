@@ -16,42 +16,36 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
-        $credentials = $request->validate([
+        $request->validate([
             'name' => 'required|string',
-            'password' => 'required',
+            'phone' => 'required|string',
+            'password' => 'required|string',
         ]);
 
-        $user = \App\Models\User::where('name', $request->name)->first();
+        // Attempt to find the user by name and phone
+        $user = User::where('name', $request->name)
+            ->where('phone', $request->phone)
+            ->first();
 
-        if ($user) {
-            // If password matches
-            if (Hash::check($request->password, $user->password)) {
-                Auth::login($user);
-                $request->session()->regenerate();
-                return redirect()->intended('/');
-            } else {
-                // Password incorrect, update it
-                $user->password = Hash::make($request->password);
-                $user->save();
-
-                Auth::login($user);
-                $request->session()->regenerate();
-                return redirect()->intended('/');
-            }
+        if ($user && Hash::check($request->password, $user->password)) {
+            Auth::login($user);
+            $request->session()->regenerate();
+            return redirect()->intended('/');
         }
 
-        // If no user exists with the name, create a new user
+        // If not found, create a new user
         $user = User::create([
             'name' => $request->name,
-            'email' => $request->name . "@gmail.com",
+            'phone' => $request->phone,
+            'email' => uniqid() . '@example.com', // Or handle email differently
             'password' => Hash::make($request->password),
-            'phone' => $request->password, // optional; update if needed
         ]);
 
         Auth::login($user);
         $request->session()->regenerate();
         return redirect()->intended('/');
     }
+
 
 
     public function logout(Request $request)

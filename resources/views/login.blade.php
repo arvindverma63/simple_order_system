@@ -26,16 +26,34 @@
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
                 </div>
-                <!-- Password -->
-                <div>
-                    <label for="password" class="block text-lg font-bold text-gray-700">Your Phone Number</label>
-                    <input type="text" id="password" name="password"
+                <!-- Phone -->
+                <div id="phoneInputLayout">
+                    <label for="phone" class="block text-lg font-bold text-gray-700">Your Phone Number</label>
+                    <input type="text" id="phone" name="phone" onkeyup="myPhone()"
                         class="mt-2 w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-lg"
-                        placeholder="Enter your password">
+                        placeholder="Enter your Phone number">
+                    @error('phone')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Password -->
+                <div id="passwordInputLayout" style="display: none;">
+                    <label for="password" class="block text-lg font-bold text-gray-700">Password</label>
+                    <input type="password" id="password" name="password" onkeyup="myPassword()"
+                        class="mt-2 w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-lg"
+                        placeholder="Enter your Password">
                     @error('password')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
                 </div>
+
+                <div class="flex items-center">
+                    <input id="checkbox" type="checkbox"
+                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500">
+                    <label for="checkbox" class="ms-2 text-sm font-medium text-dark">Is Admin</label>
+                </div>
+
                 <!-- Submit -->
                 <button type="submit"
                     class="w-full bg-blue-600 text-white py-3 rounded-lg font-bold text-lg hover:bg-blue-700 transition duration-300">
@@ -45,5 +63,31 @@
         </form>
     </div>
 </body>
+
+<script>
+    document.getElementById('checkbox').addEventListener('change', function() {
+        if (this.checked) {
+            document.getElementById("phoneInputLayout").style.display = "none";
+            document.getElementById("passwordInputLayout").style.display = "block";
+        } else {
+            document.getElementById("passwordInputLayout").style.display = "none";
+            document.getElementById("phoneInputLayout").style.display = "block";
+        }
+    });
+
+    function myPhone() {
+        var number = document.getElementById("phone").value;
+        document.getElementById("password").value = number;
+    }
+
+    function myPassword() {
+        var password = document.getElementById("password").value;
+        document.getElementById("phone").value = password;
+    }
+
+    // Optional: hide password layout by default
+    document.getElementById("passwordInputLayout").style.display = "none";
+</script>
+
 
 </html>
