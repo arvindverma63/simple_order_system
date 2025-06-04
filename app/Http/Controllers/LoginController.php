@@ -57,7 +57,7 @@ class LoginController extends Controller
 
         // Admin login attempted but not found
         return back()->withErrors([
-            'login' => 'Invalid admin credentials.',
+            'error' => 'Invalid admin credentials.',
         ]);
     }
 
