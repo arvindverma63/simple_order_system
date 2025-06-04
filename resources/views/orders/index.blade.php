@@ -23,8 +23,8 @@
                         <th class="px-4 py-3 font-bold text-gray-700">Name</th>
                         <th class="px-4 py-3 font-bold text-gray-700">Phone</th>
                         <th class="px-4 py-3 font-bold text-gray-700">Sizes</th>
-                        <th class="px-4 py-3 font-bold text-gray-700">Total Cost (with tax)</th>
-                        <th class="px-4 py-3 font-bold text-gray-700">Payment Due Date</th>
+                        <th class="px-4 py-3 font-bold text-gray-700">Total</th>
+                        <th class="px-4 py-3 font-bold text-gray-700">Payment Due</th>
                     </tr>
                 </thead>
                 <tbody>
