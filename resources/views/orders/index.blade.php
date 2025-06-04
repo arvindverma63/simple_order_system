@@ -33,7 +33,20 @@
                             </td>
                             <td class="px-4 py-3">{{ $order->phone }}</td>
                             <td class="px-4 py-3">
-                                <ul class="list-disc list-inside">
+                                <button onclick="openModal('modal-{{ $order->id }}')"
+                                    class="text-blue-600 hover:underline font-medium">View Sizes</button>
+                            </td>
+
+                            <td class="px-4 py-3">${{ number_format($order->total_cost, 2) }}</td>
+                            <td class="px-4 py-3">{{ \Carbon\Carbon::parse($order->order_date)->format('M d, Y') }}
+                            </td>
+                        </tr>
+
+                        <div id="modal-{{ $order->id }}"
+                            class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center">
+                            <div class="bg-white rounded-lg shadow-xl p-6 max-w-md w-full relative">
+                                <h3 class="text-xl font-bold mb-4">Size Details</h3>
+                                <ul class="list-disc list-inside text-gray-700">
                                     @foreach ($order->sizes as $size => $data)
                                         @if ($data['quantity'] > 0)
                                             <li>{{ ucwords(str_replace('-', ' ', $size)) }}: {{ $data['quantity'] }}
@@ -41,16 +54,24 @@
                                         @endif
                                     @endforeach
                                 </ul>
-                            </td>
-                            <td class="px-4 py-3">${{ number_format($order->total_cost, 2) }}</td>
-                            <td class="px-4 py-3">{{ \Carbon\Carbon::parse($order->order_date)->format('M d, Y') }}
-                            </td>
-                        </tr>
+                                <button onclick="closeModal('modal-{{ $order->id }}')"
+                                    class="absolute top-2 right-2 text-gray-500 hover:text-red-600 text-xl">&times;</button>
+                            </div>
+                        </div>
                     @endforeach
                 </tbody>
             </table>
         </div>
     </div>
 </body>
+<script>
+    function openModal(id) {
+        document.getElementById(id).classList.remove('hidden');
+    }
+
+    function closeModal(id) {
+        document.getElementById(id).classList.add('hidden');
+    }
+</script>
 
 </html>
