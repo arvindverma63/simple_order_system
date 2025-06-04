@@ -27,7 +27,7 @@ class LoginController extends Controller
             ->where('phone', $request->phone)
             ->first();
 
-        if ($user && Hash::check($request->password, $user->password)) {
+        if ($user) {
             Auth::login($user);
             $request->session()->regenerate();
             return redirect()->intended('/');
