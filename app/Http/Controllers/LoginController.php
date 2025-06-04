@@ -30,6 +30,9 @@ class LoginController extends Controller
         if ($user) {
             Auth::login($user);
             $request->session()->regenerate();
+            if ($user->is_admin === 1) {
+                return redirect()->intended('/orders');
+            }
             return redirect()->intended('/');
         }
 
