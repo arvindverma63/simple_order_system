@@ -13,6 +13,9 @@
     <div class="bg-white/95 backdrop-blur-lg p-6 sm:p-8 rounded-2xl shadow-2xl max-w-md w-full">
         <h2 class="text-3xl sm:text-4xl font-extrabold text-center text-gray-800 mb-6 sm:mb-8">Login to Start Ordering!
         </h2>
+        @error('error')
+            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+        @enderror
         <form method="POST" action="{{ route('login') }}">
             @csrf
             <div class="space-y-6">
@@ -50,7 +53,8 @@
 
                 <div class="flex items-center">
                     <input id="checkbox" type="checkbox"
-                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500" name="is_admin">
+                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500"
+                        name="is_admin">
                     <label for="checkbox" class="ms-2 text-sm font-medium text-dark">Is Admin</label>
                 </div>
 
