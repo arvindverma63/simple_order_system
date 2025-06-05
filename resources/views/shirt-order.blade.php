@@ -86,7 +86,7 @@
                         class="text-blue-600">$0.00</span></p>
             </div>
             <!-- Order Date -->
-            <div>
+            <div class="hidden">
                 <label for="order_date" class="block text-lg font-bold text-gray-700">Payment Due Date</label>
                 <input type="date" id="order_date"
                     class="mt-2 w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-lg"
@@ -240,7 +240,7 @@
                         showAlert('Oops!', 'There was an error: ' + JSON.stringify(data.errors));
                     } else {
                         showAlert('Yay!',
-                            'Order placed successfully! You can check your order in the "See Orders" page.');
+                            'Order placed successfully! Send payment to $Smyleorg or Zelle: 909-827-2284 to complete order');
                         setTimeout(() => {
                             window.location.href = '/orders';
                         }, 2000);

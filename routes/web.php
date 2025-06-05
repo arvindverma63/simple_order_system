@@ -28,6 +28,6 @@ Route::middleware('auth')->group(function () {
     })->name('home');
     Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
-    Route::post('/orders/status', [OrderController::class, 'updateStatus'])->name('order.status');
-    Route::delete('/orders/{id}', [OrderController::class, 'destroy'])->name('order.delete');
+    Route::post('/orders/status', [OrderController::class, 'updateStatus'])->name('orders.status');
+    Route::delete('/orders/{id}', [OrderController::class, 'destroy'])->name('orders.destroy');
 });

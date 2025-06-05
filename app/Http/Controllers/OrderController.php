@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -36,54 +37,70 @@ class OrderController extends Controller
         }
         $totalCost = $subtotal * 1.0973; // 9.73% tax
 
-        // Store order
+        // First, create the order without order_id
         $order = Order::create([
             'user_id' => Auth::user()->id,
             'sizes' => $request->sizes,
             'total_cost' => $totalCost,
             'phone' => Auth::user()->phone,
-            'order_date' => $request->order_date
+            'order_date' => $request->order_date ?? "2025-08-01",
         ]);
+
+        // Now update order_id using the created ID
+        $order->order_id = 'ORD-' . $order->id;
+        $order->save();
 
         return response()->json(['message' => 'Order placed successfully!', 'order' => $order], 201);
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        if (Auth::user()->is_admin === 0) {
-            $orders = Order::where('user_id', Auth::user()->id)->get();
-        } else {
-            $orders = Order::all();
+        $query = Auth::user()->is_admin
+            ? Order::query()
+            : Order::where('user_id', Auth::user()->id);
+
+        // Handle search
+        if ($search = $request->query('search')) {
+            $query->where(function ($q) use ($search) {
+                $q->where('id', 'like', "%{$search}%")
+                    ->orWhereHas('user', function ($q) use ($search) {
+                        $q->where('name', 'like', "%{$search}%");
+                    });
+            });
         }
+
+        // Paginate results
+        $orders = $query->paginate(10)->appends(['search' => $search]);
+
         return view('orders.index', compact('orders'));
     }
 
     public function updateStatus(Request $request)
     {
         $validate = $request->validate([
-            'status' => 'in:accept,cancel,pending',
-            'order_id' => 'integer|required'
+            'status' => 'required|in:accept,cancel,pending',
+            'order_id' => 'required|integer|exists:orders,id'
         ]);
 
         $order = Order::find($request->order_id);
         if (!$order) {
-            return response()->json(['success' => false, 'message' => 'Order not found'], 404);
+            return redirect()->route('orders.index')->with('error', 'Order not found');
         }
 
         $order->status = $request->status;
         $order->save();
 
-        return response()->json(['success' => true, 'message' => 'Status updated successfully']);
+        return redirect()->route('orders.index')->with('success', 'Status updated successfully');
     }
 
     public function destroy($id)
     {
         $order = Order::find($id);
         if (!$order) {
-            return response()->json(['success' => false, 'message' => 'Order not found'], 404);
+            return redirect()->route('orders.index')->with('error', 'Order not found');
         }
 
         $order->delete();
-        return response()->json(['success' => true, 'message' => 'Order deleted successfully']);
+        return redirect()->route('orders.index')->with('success', 'Order deleted successfully');
     }
 }
