@@ -77,20 +77,25 @@
         <h2 class="text-3xl sm:text-4xl font-extrabold text-center text-gray-800 mb-6 sm:mb-8">All Shirt Orders</h2>
         <!-- Delete Confirmation Modal -->
         @if (session('success'))
-            <div class="bg-green-100 text-green-800 p-4 rounded-lg mb-4">
-                {{ session('success') }}
+            <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 5000)" x-show="show"
+                class="bg-green-100 text-green-800 p-4 rounded-lg mb-4 flex justify-between items-center">
+                <span>{{ session('success') }}</span>
+                <button @click="show = false" class="text-green-700 hover:text-green-900 font-bold">&times;</button>
             </div>
         @endif
+
         @if (session('error'))
-            <div class="bg-red-100 text-red-800 p-4 rounded-lg mb-4">
-                {{ session('error') }}
+            <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 5000)" x-show="show"
+                class="bg-red-100 text-red-800 p-4 rounded-lg mb-4 flex justify-between items-center">
+                <span>{{ session('error') }}</span>
+                <button @click="show = false" class="text-red-700 hover:text-red-900 font-bold">&times;</button>
             </div>
         @endif
+
         <!-- Search Form -->
         <form method="GET" action="{{ route('orders.index') }}" class="mb-6">
             <div class="flex items-center space-x-4">
-                <input type="text" name="search" value="{{ request('search') }}"
-                    placeholder="Search by Order ID or Name..."
+                <input type="text" name="search" value="{{ request('search') }}" placeholder="Search by Order ID "
                     class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
                 <button type="submit"
                     class="bg-blue-600 text-white py-2 px-4 rounded-lg font-bold hover:bg-blue-700 transition duration-300">
@@ -144,10 +149,20 @@
                                         <i class="fa-solid fa-pen-to-square"></i>
                                     </button>
                                 @endif
-                                <button onclick="openDeleteModal({{ $order->id }})"
-                                    class="text-red-600 hover:underline font-medium">
-                                    <i class="fa-solid fa-trash"></i>
-                                </button>
+
+                                @if ($order->status == 'pending' && Auth::user()->is_admin === 0)
+                                    <button onclick="openDeleteModal({{ $order->id }})"
+                                        class="text-red-600 hover:underline font-medium">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                @endif
+                                 @if (Auth::user()->is_admin === 1)
+                                    <button onclick="openDeleteModal({{ $order->id }})"
+                                        class="text-red-600 hover:underline font-medium">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                @endif
+
                             </td>
                         </tr>
                         <!-- Size Details Modal -->
@@ -166,9 +181,14 @@
                                         @endif
                                     @endforeach
                                 </ul>
-                                <h3 class="text font-bold text-gray-800 mb-4 text-center border-b pb-2">
-                                    Send payment to $Smyleorg or Zelle: 909-827-2284 to complete order
-                                </h3>
+                                <center class="mt-6">
+                                    <h3 style="font-weight: bold;">Send payment to $Smyleorg or Zelle <br> 909-827-2284
+                                        to
+                                        complete order</h3>
+                                    <h4 style="font-weight: bold;">Please include the order number
+                                        <strong>{{ $order->order_id }}</strong> in the payment memo
+                                    </h4>
+                                </center>
                                 <button onclick="closeModal('modal-{{ $order->id }}')"
                                     class="absolute top-2 right-3 text-gray-400 hover:text-red-500 text-2xl leading-none">×</button>
                                 <div class="text-center mt-6">
@@ -280,5 +300,7 @@
         });
     </script>
 </body>
+<script src="//unpkg.com/alpinejs" defer></script>
+
 
 </html>

@@ -21,20 +21,20 @@
             <div class="space-y-6">
                 <!-- Username -->
                 <div>
-                    <label for="name" class="block text-lg font-bold text-gray-700">Your Household Name</label>
+                    <label for="name" class="block text-lg font-bold text-gray-700">Enter Head of Household Name</label>
                     <input type="text" id="name" name="name" value="{{ old('name') }}"
                         class="mt-2 w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-lg"
-                        placeholder="Enter your Household Name">
+                        placeholder="Enter Head of Household Name">
                     @error('name')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
                 </div>
                 <!-- Phone -->
                 <div id="phoneInputLayout">
-                    <label for="phone" class="block text-lg font-bold text-gray-700">Your Mobile Number</label>
+                    <label for="phone" class="block text-lg font-bold text-gray-700">Enter Mobile Number</label>
                     <input type="text" id="phone" name="phone" onkeyup="myPhone()"
                         class="mt-2 w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-lg"
-                        placeholder="Enter your Mobile number">
+                        placeholder="Enter Mobile Number">
                     @error('phone')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror

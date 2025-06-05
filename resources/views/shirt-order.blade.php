@@ -14,8 +14,8 @@
     <div id="alert-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div class="bg-white/95 backdrop-blur-lg p-6 rounded-2xl shadow-2xl max-w-sm w-full text-center">
             <h3 id="alert-title" class="text-xl font-bold text-gray-800 mb-4"></h3>
-            <p id="alert-message" class="text-gray-600 mb-6"></p>
-            <button onclick="closeAlert()"
+            <div id="alert-message" class="text-gray-600 mb-6"></div>
+            <button onclick="closeAlert()" id="okBtn"
                 class="bg-blue-600 text-white py-2 px-4 rounded-lg font-bold hover:bg-blue-700 transition duration-300">OK</button>
         </div>
     </div>
@@ -177,7 +177,7 @@
 
         function showAlert(title, message) {
             document.getElementById('alert-title').textContent = title;
-            document.getElementById('alert-message').textContent = message;
+            document.getElementById('alert-message').innerHTML = message;
             document.getElementById('alert-modal').classList.remove('hidden');
         }
 
@@ -240,10 +240,13 @@
                         showAlert('Oops!', 'There was an error: ' + JSON.stringify(data.errors));
                     } else {
                         showAlert('Yay!',
-                            'Order placed successfully! Send payment to $Smyleorg or Zelle: 909-827-2284 to complete order');
-                        setTimeout(() => {
+                            `Order placed successfully! <br>
+            <h3 style="font-weight: bold;">Send payment to $Smyleorg or Zelle <br> 909-827-2284 to complete order</h3>
+            <h4 style="font-weight: bold;">Please include the order number <strong>${data.order.order_id}</strong> in the payment memo</h4>`
+                        );
+                        document.getElementById("okBtn").addEventListener("click", function() {
                             window.location.href = '/orders';
-                        }, 2000);
+                        });
                     }
                 })
                 .catch(error => {
