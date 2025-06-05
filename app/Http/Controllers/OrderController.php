@@ -43,7 +43,7 @@ class OrderController extends Controller
             'sizes' => $request->sizes,
             'total_cost' => $totalCost,
             'phone' => Auth::user()->phone,
-            'order_date' => $request->order_date ?? "2025-08-01",
+            'order_date' => "2025-08-01",
         ]);
 
         // Now update order_id using the created ID
@@ -62,7 +62,7 @@ class OrderController extends Controller
         // Handle search
         if ($search = $request->query('search')) {
             $query->where(function ($q) use ($search) {
-                $q->where('id', 'like', "%{$search}%")
+                $q->where('order_id', 'like', "%{$search}%")
                     ->orWhereHas('user', function ($q) use ($search) {
                         $q->where('name', 'like', "%{$search}%");
                     });
